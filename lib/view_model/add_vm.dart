@@ -128,7 +128,7 @@ class AddVm extends MyBaseViewModel {
               birthdate: birthDateController,
               studentImageFile: profilePicture!)
           .then((apiResponse) => {
-                print(apiResponse.body),
+                
                 setBusy(false),
                 notifyListeners(),
                 Navigator.pop(viewContext!)

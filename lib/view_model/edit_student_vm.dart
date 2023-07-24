@@ -21,7 +21,7 @@ class EditStudentVM extends MyBaseViewModel {
   
 
   updateProfile(Student student) async {
-    if (formKey.currentState!.validate()) {
+    if (formKey.currentState!.validate()&& selectedProfileImage!=null) {
       setBusy(true);
       ApiResponse apiResponse = await ApiClient().update(
           student: student,
@@ -31,10 +31,10 @@ class EditStudentVM extends MyBaseViewModel {
           studentImageFile: selectedProfileImage!);
 
       if (apiResponse.code == 200) {
-        print("good");
+        // print("good");
         Navigator.pop(viewContext!);
       } else {
-        print("error");
+        // print("error");
         Navigator.pop(viewContext!);
       }
 

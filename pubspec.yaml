@@ -41,6 +41,7 @@ dependencies:
   permission_handler: ^10.4.3
   stacked: 2.1.0
   awesome_dialog: 2.0.0
+  intl: ^0.18.1
   
 
 dev_dependencies:

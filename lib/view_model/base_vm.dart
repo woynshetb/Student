@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +11,7 @@ class MyBaseViewModel extends BaseViewModel {
   BuildContext? viewContext;
   PermissionStatus? permissionStatus;
   final imagePicker = ImagePicker();
+    StreamController _controller = StreamController();
   final formKey = GlobalKey<FormState>();
   initialise() {}
 

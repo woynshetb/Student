@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:student/model/student.dart';
 import 'package:student/services/validator.service.dart';
 import 'package:student/view_model/edit_student_vm.dart';
+import 'package:student/widgets/customButton.dart';
+import 'package:student/widgets/customTextForm.dart';
 
 class EditStudentPage extends StatefulWidget {
   Student currentStudent;
@@ -13,6 +16,7 @@ class EditStudentPage extends StatefulWidget {
 }
 
 class _EditStudentPageState extends State<EditStudentPage> {
+  final DateFormat formatter = DateFormat('dd/MM/yyyy');
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
@@ -42,12 +46,11 @@ class _EditStudentPageState extends State<EditStudentPage> {
                 ),
               ),
               title: Text(
-                "Edit Student${vm.firstNameController.text}",
+                "Edit Student",
                 style: TextStyle(
                     color: Colors.black, fontSize: deviceSize.width * 0.048),
               ),
             ),
-           
             body: vm.isBusy
                 ? const CircularProgressIndicator()
                 : Padding(
@@ -59,122 +62,137 @@ class _EditStudentPageState extends State<EditStudentPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                         
+
                             SizedBox(
-                              height: deviceSize.height * 0.04,
-                            ),
-                            Align(
-                              alignment: Alignment.center,
-                              child: InkWell(
-                                onTap: () {
-                                  vm.selectImage(context, deviceSize);
-                                },
-                                child: vm.selectedProfileImage !=null ?CircleAvatar(
-                                  radius: deviceSize.width * 0.12,
-                                  backgroundColor: Colors.teal,
-                                  child: CircleAvatar(
-                                          radius: deviceSize.width * 0.11,
-                                          backgroundColor: Colors.white,
-                                          backgroundImage: FileImage(
-                                              vm.selectedProfileImage!),
-                                        ),
-                                ) : CircleAvatar(
-                                  radius: deviceSize.width * 0.12,
-                                  backgroundColor: Colors.teal,
-                                  child: CircleAvatar(
-                                          radius: deviceSize.width * 0.11,
-                                          backgroundColor: Colors.white,
-                                          backgroundImage:
-                                              NetworkImage(vm.imageUrl),
-                                        )
-                                      
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: deviceSize.height * 0.04,
+                              height: deviceSize.height * 0.048,
                             ),
                             Text(
                               "First Name",
                               style: TextStyle(
-                                color: Colors.black,
-                                fontSize: deviceSize.width * 0.04,
-                              ),
+                                  color: Colors.black,
+                                  fontSize: deviceSize.width * 0.036,
+                                  fontWeight: FontWeight.w600),
                             ),
                             SizedBox(
-                              height: deviceSize.height * 0.02,
+                              height: deviceSize.height * 0.016,
                             ),
-                            TextFormField(
+                            CustomTextForm(
                               controller: vm.firstNameController,
+                              filled: true,
+                              authoFocus: false,
+                              filledColor: Color(0xffEDF1F9),
                               validator: (value) =>
                                   FormValidator.validateFirstName(value!),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.grey.withOpacity(0.2),
-                              ),
                             ),
+
                             SizedBox(
-                              height: deviceSize.height * 0.02,
+                              height: deviceSize.height * 0.032,
                             ),
                             Text(
                               "Last Name",
                               style: TextStyle(
-                                color: Colors.black,
-                                fontSize: deviceSize.width * 0.04,
-                              ),
+                                  color: Colors.black,
+                                  fontSize: deviceSize.width * 0.036,
+                                  fontWeight: FontWeight.w600),
                             ),
                             SizedBox(
-                              height: deviceSize.height * 0.02,
+                              height: deviceSize.width * 0.016,
                             ),
-                            TextFormField(
+                            CustomTextForm(
                               controller: vm.lastNameController,
+                              filled: true,
+                              filledColor: Color(0xffEDF1F9),
+                              authoFocus: false,
                               validator: (value) =>
                                   FormValidator.validateLastName(value!),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.grey.withOpacity(0.2),
-                              ),
                             ),
                             SizedBox(
-                              height: deviceSize.height * 0.02,
+                              height: deviceSize.height * 0.032,
                             ),
                             Text(
                               "Date Of Birth",
                               style: TextStyle(
-                                color: Colors.black,
-                                fontSize: deviceSize.width * 0.04,
-                              ),
+                                  color: Colors.black,
+                                  fontSize: deviceSize.width * 0.036,
+                                  fontWeight: FontWeight.w600),
                             ),
+
                             SizedBox(
-                              height: deviceSize.height * 0.02,
+                              height: deviceSize.height * 0.016,
                             ),
-                            GestureDetector(
-                              onTap: () {
+                            CustomButton(
+                              width: deviceSize.width,
+                              height: deviceSize.height * 0.064,
+                              backgroundColor: Color(0xffEDF1F9),
+                              borderColor: Theme.of(context).primaryColor,
+                              textColor: Colors.black,
+                              title: vm.birthDateController == DateTime.now()
+                                  ? "Select Birth Date"
+                                  : formatter.format(vm.birthDateController),
+                              onPressed: () {
                                 vm.getBirthDate();
                               },
-                              child: Text(
-                                  vm.birthDateController.toIso8601String()),
                             ),
+
+                            SizedBox(
+                              height: deviceSize.height * 0.032,
+                            ),
+                            Text(
+                              "Photo",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: deviceSize.width * 0.036,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(
+                              height: deviceSize.height * 0.016,
+                            ),
+                            CustomButton(
+                                width: deviceSize.width,
+                                height: deviceSize.height * 0.06,
+                                borderColor: Theme.of(context).primaryColor,
+                                backgroundColor: Color(0xffEDF1F9),
+                                textColor: Colors.black,
+                                title: vm.selectedProfileImage == null
+                                    ? vm.imageUrl
+                                    : vm.selectedProfileImage!.path,
+                                onPressed: () {
+                                  vm.selectImage(context, deviceSize);
+                                }),
                             SizedBox(
                               height: deviceSize.height * 0.04,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    await vm
-                                        .updateProfile(widget.currentStudent);
-                                  },
-                                  child: const Text("Update"),
+                                Expanded(
+                                  child: CustomButton(
+                                    onPressed: () async {
+                                      await vm
+                                          .updateProfile(widget.currentStudent);
+                                    },
+                                    title: "Update",
+                                    height: deviceSize.height * 0.054,
+                                    backgroundColor: Color(0xff0C5176),
+                                  ),
                                 ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text("cancel"),
+                                SizedBox(
+                                  width: deviceSize.width * 0.04,
+                                ),
+                                Expanded(
+                                  child: CustomButton(
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                    },
+                                    title: "Cancel",
+                                    height: deviceSize.height * 0.054,
+                                    backgroundColor: Color(0xffB0CFE0),
+                                  ),
                                 ),
                               ],
-                            )
+                            ),
+                           
                           ],
                         ),
                       ),
