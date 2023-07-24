@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:student/network/api.dart';
+import 'package:student/view/home_page.dart';
 import 'package:student/view_model/base_vm.dart';
 
 class AddVm extends MyBaseViewModel {
@@ -116,7 +118,7 @@ class AddVm extends MyBaseViewModel {
   }
 
   createStudent() async {
-    if (formKey.currentState!.validate()) {
+    if (formKey.currentState!.validate()&& profilePicture!=null) {
       setBusy(true);
       notifyListeners();
       int nextStudentId = await getNextStudentId();
@@ -131,7 +133,8 @@ class AddVm extends MyBaseViewModel {
                 
                 setBusy(false),
                 notifyListeners(),
-                Navigator.pop(viewContext!)
+                Navigator.push(viewContext!, MaterialPageRoute(builder: (context)=> HomePage()))
+     
               });
       setBusy(false);
       notifyListeners();
