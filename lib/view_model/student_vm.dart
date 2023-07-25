@@ -28,8 +28,8 @@ class StudentVM extends MyBaseViewModel {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: MediaQuery.of(viewContext!).size.width * 0.15,
-              height: MediaQuery.of(viewContext!).size.width * 0.15,
+              width: MediaQuery.of(viewContext!).size.width * 0.1,
+              height: MediaQuery.of(viewContext!).size.width * 0.1,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.red, width: 5),
                 shape: BoxShape.circle,
@@ -45,7 +45,7 @@ class StudentVM extends MyBaseViewModel {
               height: MediaQuery.of(viewContext!).size.height * 0.02,
             ),
             Text(
-              "Delete Student ",
+              "Delete",
               style: TextStyle(
                   fontSize: MediaQuery.of(viewContext!).size.width * 0.038,
                   fontWeight: FontWeight.bold,
@@ -76,8 +76,8 @@ class StudentVM extends MyBaseViewModel {
               children: [
                 CustomButton(
                   height: MediaQuery.of(viewContext!).size.height * 0.04,
-                  width: MediaQuery.of(viewContext!).size.width * 0.2,
-                  title: "Delete",
+                  width: MediaQuery.of(viewContext!).size.width * 0.16,
+                  title: "Yes",
                   backgroundColor: Colors.red,
                   onPressed: () async {
                     Navigator.pop(viewContext!);
@@ -94,8 +94,8 @@ class StudentVM extends MyBaseViewModel {
                 ),
                 CustomButton(
                   height: MediaQuery.of(viewContext!).size.height * 0.04,
-                  width: MediaQuery.of(viewContext!).size.width * 0.2,
-                  title: "Cancel",
+                  width: MediaQuery.of(viewContext!).size.width * 0.16,
+                  title: "No",
                   backgroundColor: Color(0xffB0CFE0),
                   onPressed: () {
                     Navigator.pop(viewContext!);
