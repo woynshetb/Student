@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                             return PaginatedDataTable(
                               horizontalMargin: 10,
                               dataRowHeight: deviceSize.height * 0.064,
-                              columnSpacing: deviceSize.width * 0.1,
+                              columnSpacing: deviceSize.width * 0.072,
                               columns: const [
                                 DataColumn(
                                     label: Text(
@@ -142,7 +142,6 @@ class _MyDataSource extends DataTableSource {
       DataCell(
         CachedNetworkImage(
           imageUrl: student.photoUrl,
-          
           progressIndicatorBuilder: (context, url, progress) => Center(
             child: SizedBox(
               width: deviceSize.width * 0.04,
@@ -152,6 +151,7 @@ class _MyDataSource extends DataTableSource {
               ),
             ),
           ),
+          
           imageBuilder: (context, imageProvider) => Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -163,6 +163,17 @@ class _MyDataSource extends DataTableSource {
               ),
             ),
           ),
+          errorWidget: (context, val, err) {
+            return Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image:AssetImage("assets/images/Student.png"),
+                  fit: BoxFit.contain,
+                ),
+              ),
+            );
+          },
         ),
       ),
       DataCell(
