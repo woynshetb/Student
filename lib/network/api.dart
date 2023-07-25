@@ -106,5 +106,5 @@ class ApiClient {
     }
   }
 
-  Future getAll() async {}
+
 }

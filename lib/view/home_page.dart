@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,8 @@ import 'package:student/model/student.dart';
 import 'package:student/view/add_page.dart';
 import 'package:student/view/edit_page.dart';
 import 'package:student/view_model/student_vm.dart';
+import 'package:student/widgets/CustomButton.dart';
+import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -33,41 +36,38 @@ class _HomePageState extends State<HomePage> {
                 toolbarHeight: deviceSize.height * 0.12,
                 backgroundColor: Colors.white,
                 elevation: 1,
+                centerTitle: false,
                 title: Text(
                   "List of students",
                   style: TextStyle(
                       color: Colors.black, fontSize: deviceSize.width * 0.044),
                 ),
                 actions: [
-                  GestureDetector(
-                    onTap: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddStudentPage()));
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.symmetric(
-                          vertical: deviceSize.height * 0.04,
-                          horizontal: deviceSize.width * 0.04),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: deviceSize.width * 0.056, vertical: 0),
-                      decoration: BoxDecoration(
-                          color: Colors.teal,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: const Text(
-                        "Create",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      vertical: deviceSize.height * 0.036,
+                      horizontal: deviceSize.width * 0.04,
                     ),
+                    child: CustomButton(
+                        height: deviceSize.height * 0.04,
+                        width: deviceSize.width * 0.2,
+                        backgroundColor: const Color(
+                          0xff0C5176,
+                        ),
+                        title: "Create",
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AddStudentPage(),
+                            ),
+                          );
+                        }),
                   ),
                 ],
               ),
               body: viewModel.isBusy
-                  ? CircularProgressIndicator()
+                  ? const Center(child: CircularProgressIndicator())
                   : SingleChildScrollView(
                       child: StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
@@ -112,61 +112,6 @@ class _HomePageState extends State<HomePage> {
                               ],
                               source: _MyDataSource(viewModel, context),
                             );
-
-                            // return ListView.builder(
-                            //   itemCount: viewModel.students.length,
-                            //   itemBuilder: (context, index) {
-                            //     return ListTile(
-                            //       title: Text(
-                            //           '${viewModel.students[index].firstName} ${viewModel.students[index].lastName}'),
-                            //       subtitle: Text(
-                            //           'Birthdate: ${viewModel.students[index].birthdate.toString()}'),
-                            //       leading: CircleAvatar(
-                            //         backgroundImage: NetworkImage(
-                            //             viewModel.students[index].photoUrl),
-                            //       ),
-                            //       trailing: Row(
-                            //         mainAxisSize: MainAxisSize.min,
-                            //         children: [
-                            //           ElevatedButton(
-                            //             onPressed: () {
-                            //               Navigator.push(
-                            //                   context,
-                            //                   MaterialPageRoute(
-                            //                       builder: (context) =>
-                            //                           EditStudentPage(
-                            //                             currentStudent:
-                            //                                 viewModel
-                            //                                         .students[
-                            //                                     index],
-                            //                           )));
-                            //               // handleImage().then(
-                            //               //   (xfile) {
-                            //               //     updateStudent(
-                            //               //       student: viewModel.students[index],
-                            //               //       studentImageFile: File(xfile!.path),
-                            //               //     );
-                            //               //   },
-                            //               // );
-                            //             },
-                            //             child: const Text("update"),
-                            //           ),
-                            //           const SizedBox(
-                            //             width: 20,
-                            //           ),
-                            //           ElevatedButton(
-                            //             onPressed: () {
-                            //               viewModel.deletStudent(
-                            //                   viewModel.students[index]);
-                            //             },
-                            //             child: const Text("Delete"),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //     );
-                            //   },
-                            // );
-
                           } else {
                             return const Center(
                               child: CircularProgressIndicator(),
@@ -194,24 +139,40 @@ class _MyDataSource extends DataTableSource {
     if (index >= students.length) return null;
     final student = students[index];
     return DataRow(cells: [
-      DataCell(Container(
-        width: deviceSize.width * 0.08,
-        // height: MediaQuery.of(context).size.height * 0.056,
-
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            // borderRadius: BorderRadius.circular(5),
-            image: DecorationImage(
-                image: NetworkImage(student.photoUrl), fit: BoxFit.cover)),
-      )),
       DataCell(
-        Text(
-          (student.firstName),
+        CachedNetworkImage(
+          imageUrl: student.photoUrl,
+          
+          progressIndicatorBuilder: (context, url, progress) => Center(
+            child: SizedBox(
+              width: deviceSize.width * 0.04,
+              height: deviceSize.width * 0.04,
+              child: CircularProgressIndicator(
+                value: progress.progress,
+              ),
+            ),
+          ),
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: NetworkImage(
+                  student.photoUrl,
+                ),
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
         ),
       ),
       DataCell(
         Text(
-          (student.firstName),
+          toBeginningOfSentenceCase(student.firstName).toString(),
+        ),
+      ),
+      DataCell(
+        Text(
+          toBeginningOfSentenceCase(student.lastName).toString(),
         ),
       ),
       DataCell(
