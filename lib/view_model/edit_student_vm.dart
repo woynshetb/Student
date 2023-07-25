@@ -1,9 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:student/model/api_response.dart';
 import 'package:student/model/student.dart';
 import 'package:student/network/api.dart';
+import 'package:student/view/home_page.dart';
 import 'package:student/view_model/base_vm.dart';
 
 class EditStudentVM extends MyBaseViewModel {
@@ -31,8 +31,27 @@ class EditStudentVM extends MyBaseViewModel {
           studentImageFile: selectedProfileImage!);
 
       if (apiResponse.code == 200) {
-        // print("good");
+        Navigator.push(viewContext!, MaterialPageRoute(builder: (context)=>HomePage()));
+      } else {
+        // print("error");
         Navigator.pop(viewContext!);
+      }
+
+      setBusy(false);
+      notifyListeners();
+    }
+    else if(formKey.currentState!.validate() && selectedProfileImage ==null){
+       setBusy(true);
+      ApiResponse apiResponse = await ApiClient().updateWithoutImage(
+          student: student,
+          firstName: firstNameController.text,
+          lastName: lastNameController.text,
+          birthdate: birthDateController,
+          imageUrl: student.photoUrl
+          );
+
+      if (apiResponse.code == 200) {
+        Navigator.push(viewContext!, MaterialPageRoute(builder: (context)=>HomePage()));
       } else {
         // print("error");
         Navigator.pop(viewContext!);

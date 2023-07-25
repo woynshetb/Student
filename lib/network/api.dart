@@ -86,6 +86,31 @@ class ApiClient {
     }
   }
 
+  Future<ApiResponse> updateWithoutImage({
+    required Student student,
+    required String firstName,
+    required String lastName,
+    required DateTime birthdate,
+    required String imageUrl,
+  }) async {
+    try {
+      DocumentReference studentRef =
+          FirebaseFirestore.instance.collection('students').doc(student.docId);
+      await studentRef.update({
+        'firstname': firstName,
+        'lastname': lastName,
+        'birthdate': birthdate,
+        'photo': imageUrl,
+      });
+      return ApiResponse(
+          code: 200,
+          body: studentRef,
+          message: 'Student updated successfully!');
+    } catch (e) {
+      return ApiResponse(code: 404, body: e, message: 'Error updating student');
+    }
+  }
+
   Future<ApiResponse> delete({required Student student}) async {
     try {
       if (student.photoUrl.isNotEmpty) {
@@ -105,6 +130,4 @@ class ApiClient {
           code: 404, body: "", message: 'Error deleting student: $e');
     }
   }
-
-
 }

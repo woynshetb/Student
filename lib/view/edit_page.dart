@@ -52,7 +52,7 @@ class _EditStudentPageState extends State<EditStudentPage> {
               ),
             ),
             body: vm.isBusy
-                ? const CircularProgressIndicator()
+                ? const Center(child:  CircularProgressIndicator())
                 : Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: deviceSize.width * 0.04),
